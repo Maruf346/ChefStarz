@@ -1,0 +1,97 @@
+{% extends "admin/change_list.html" %}
+{% load unfold %}
+
+{% block result_list %}
+<!-- User Statistics Cards -->
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;">
+    <!-- Total Users -->
+    <div
+        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <p style="font-size: 14px; opacity: 0.9; margin: 0 0 8px 0;">Total Users</p>
+                <p style="font-size: 32px; font-weight: bold; margin: 0;">{{ total_users|default:0 }}</p>
+            </div>
+            <div style="font-size: 40px; opacity: 0.3;">👥</div>
+        </div>
+    </div>
+
+    <!-- Active Users -->
+    <div
+        style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <p style="font-size: 14px; opacity: 0.9; margin: 0 0 8px 0;">Active Users</p>
+                <p style="font-size: 32px; font-weight: bold; margin: 0;">{{ active_users|default:0 }}</p>
+            </div>
+            <div style="font-size: 40px; opacity: 0.3;">✅</div>
+        </div>
+    </div>
+
+    <!-- Inactive Users -->
+    <div
+        style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <p style="font-size: 14px; opacity: 0.9; margin: 0 0 8px 0;">Inactive Users</p>
+                <p style="font-size: 32px; font-weight: bold; margin: 0;">{{ inactive_users|default:0 }}</p>
+            </div>
+            <div style="font-size: 40px; opacity: 0.3;">❌</div>
+        </div>
+    </div>
+
+    <!-- Parent Approved -->
+    <div
+        style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <p style="font-size: 14px; opacity: 0.9; margin: 0 0 8px 0;">Parent Approved</p>
+                <p style="font-size: 32px; font-weight: bold; margin: 0;">{{ parent_approved|default:0 }}</p>
+            </div>
+            <div style="font-size: 40px; opacity: 0.3;">👨‍👩‍👧</div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart Section -->
+{% if user_growth_chart %}
+<div
+    style="background: white; padding: 20px; margin: 0 0 20px 0; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+    <h3 style="margin-bottom: 15px; font-size: 18px; font-weight: 600; color: #1f2937;">📊 User Registration Growth</h3>
+    <div style="height: 300px; width: 100%;">
+        <canvas id="userGrowthChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('userGrowthChart').getContext('2d');
+    const chartData = {{ user_growth_chart| safe }};
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endif %}
+
+{{ block.super }}
+{% endblock %}
