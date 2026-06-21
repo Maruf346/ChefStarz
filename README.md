@@ -120,5 +120,5 @@ Available endpoints (once running):
 - **Backups:** Database backups should be managed at the RDS/Server level.
 
 ## 16. Support & Contact
-- **Developer:** Shemanto27
-- **Repository:** https://github.com/shemanto27/Chef_Starz
+- **Developer:** Maruf Hossain
+- **Repository:** https://github.com/Maruf346/ChefStarz
