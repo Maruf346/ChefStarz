@@ -1,0 +1,69 @@
+# ChefStarz backend — Python >=3.12
+# Source of truth: pyproject.toml + uv.lock
+# Install:  uv sync  (preferred)  |  pip install -r requirements.txt
+#
+# Package map (matches core/settings.py INSTALLED_APPS & imports):
+#   Django              → core framework
+#   djangorestframework → REST API (rest_framework)
+#   djangorestframework-simplejwt → JWT auth + token blacklist
+#   dj-rest-auth        → registration, password reset (dj_rest_auth)
+#   django-allauth      → social auth providers (google, apple)
+#   drf-yasg            → Swagger/ReDoc API docs
+#   django-unfold       → admin UI (unfold)
+#   django-cors-headers → CORS middleware (corsheaders)
+#   django-storages     → S3 media/static (storages)
+#   boto3               → AWS S3 backend for django-storages
+#   python-decouple     → reads this .env file (decouple.config)
+#   psycopg2-binary     → PostgreSQL driver (production DB)
+#   Pillow              → ImageField uploads (profile pictures, etc.)
+#   cryptography        → Apple Sign-In / OAuth crypto (allauth)
+#   requests            → HTTP client (allauth / OAuth)
+#   gunicorn            → production WSGI server (Dockerfile CMD)
+#   whitenoise          → static file serving (optional middleware)
+#   sentry-sdk[django]  → error monitoring (production, settings.py)
+#   django-extensions   → dev utilities (graph_models in erd.sh)
+#   black / isort / pre-commit → code formatting & git hooks
+
+# --- Core framework ---
+Django==6.0.2
+djangorestframework==3.16.1
+python-decouple==3.8
+psycopg2-binary==2.9.11
+Pillow==12.1.1
+requests==2.33.0
+cryptography==46.0.6
+
+# --- Authentication ---
+dj-rest-auth==7.1.0
+django-allauth==65.14.3
+djangorestframework-simplejwt==5.5.1
+
+# --- API documentation ---
+drf-yasg==1.21.14
+
+# --- Admin UI ---
+django-unfold==0.80.1
+
+# --- CORS & utilities ---
+django-cors-headers==4.9.0
+django-extensions==4.1
+
+# --- AWS / file storage ---
+boto3==1.42.49
+django-storages==1.14.6
+
+# --- Production server & static files ---
+gunicorn==25.1.0
+whitenoise==6.11.0
+
+# --- Error monitoring (loaded when DEBUG=False) ---
+sentry-sdk[django]==2.52.0
+
+# --- Development / code quality ---
+black==26.1.0
+isort==7.0.0
+pre-commit==4.5.1
+
+# --- Optional (not required to run the app; for erd.sh diagram generation) ---
+# pydot==3.0.4
+# pygraphviz==1.14
