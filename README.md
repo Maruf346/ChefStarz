@@ -12,7 +12,7 @@
 
 ## 1. Project Title
 - **Project Name:** ChefStarz
-- **Description:** [Enter a one-line description of what this backend does]
+- **Description:** [Chef Starz is a fun and safe place where kids can discover the joy of cooking. Explore recipes, try new challenges, and share your delicious creations.]
 
 ## 2. Overview
 - **Problem Statement:** [Briefly explain what problem this backend solves]
