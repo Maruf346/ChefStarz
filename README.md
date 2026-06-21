@@ -1,4 +1,4 @@
-# Chef_Starz
+# ChefStarz
 
 
 **Created by:** [Maruf346](https://github.com/Maruf346/ChefStarz)
