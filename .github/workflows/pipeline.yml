@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKER_REPO: shemanto27/chef_starz
+  DOCKER_REPO: maruf318/chefstarz
   BACKEND_TAG_LATEST: backend-latest
 
 jobs:
@@ -47,7 +47,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
             set -e
-            cd /home/ubuntu/Chef_Starz
+            cd /home/ubuntu/ChefStarz
             # Clean up old unused images and containers to free up space
             docker system prune -af
             docker compose -f docker-compose.prod.yml down
