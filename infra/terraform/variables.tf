@@ -5,12 +5,12 @@ variable "instance_type" {
 
 variable "ami" {
   description = "Ubuntu AMI ID"
-  default     = "ami-0c33fcb753a7176f6" # Standard Ubuntu 22.04 LTS in eu-north-1
+  default     = "ami-0862be96e41dcbf74" # Ubuntu 22.04 LTS in us-east-2 (Ohio)
 }
 
 variable "bucket_name" {
   description = "S3 bucket name"
-  default     = "chef-starz-bucket"
+  default     = "chestarz-bucket"
 }
 
 variable "ec2_name" {
@@ -36,5 +36,5 @@ variable "aws_profile" {
 
 variable "region" {
   description = "AWS region"
-  default     = "eu-north-1"
+  default     = "us-east-2"
 }

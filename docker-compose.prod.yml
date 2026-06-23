@@ -1,6 +1,6 @@
 services:
   backend:
-    image: shemanto27/chef_starz:backend-latest
+    image: maruf318/chefstarz:backend-latest
     container_name: chef_starz-backend
     ports:
       - "8000:8000"

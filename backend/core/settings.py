@@ -19,7 +19,7 @@ DEBUG = config('DEBUG', cast=bool, default=False)
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', default=None)
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY', default=None)
 AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME', default=None)
-AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME', default='eu-north-1')
+AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME', default='us-east-2')
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
 AWS_S3_FILE_OVERWRITE = config('AWS_S3_FILE_OVERWRITE', cast=bool, default=False)
 AWS_S3_VERIFY = config('AWS_S3_VERIFY', cast=bool, default=True)
