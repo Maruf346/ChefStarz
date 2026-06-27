@@ -13,9 +13,8 @@ from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 # Create your views here.
 
 class RecipeModelViewSet(ModelViewSet):
-    queryset = RecipeModel.objects.all().prefetch_related('step_by_step_recipes', 'likes', 'comments', 'shares', 'user', 'pins', 'saved_by')
+    queryset = RecipeModel.objects.all().order_by('-created_at').prefetch_related('step_by_step_recipes', 'likes', 'comments', 'shares', 'user', 'pins', 'saved_by')
     serializer_class = RecipeModelSerializer
-    ordering = ['-created_at']
 
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
