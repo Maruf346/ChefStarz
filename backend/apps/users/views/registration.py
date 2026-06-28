@@ -27,14 +27,21 @@ class Stage1SignupView(APIView):
             user.save()
             
             # 3. Send email to the KID
-            send_mail(
-                subject="Verify your Email",
-                message=f"Your verification code is: {otp}",
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[user.email],
-                fail_silently=False,
-            )
-            
+            try:
+                send_mail(
+                    subject="Verify your Email",
+                    message=f"Your verification code is: {otp}",
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[user.email],
+                    fail_silently=False,
+                )
+            except Exception:
+                user.delete()
+                return Response(
+                    {"error": "Failed to send verification email. Please check email configuration."},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+
             return Response({
                 "message": "Step 1 complete. OTP sent to kid's email.",
                 "email": user.email
@@ -111,14 +118,20 @@ class CompleteProfileView(APIView):
                 user.save()
                 
                 # 2. Send email to the PARENT
-                send_mail(
-                    subject="Action Required: Parental Consent",
-                    message=f"Your child is signing up. Provide them this code to approve: {parent_otp}",
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[user.parent_email],
-                    fail_silently=False,
-                )
-                
+                try:
+                    send_mail(
+                        subject="Action Required: Parental Consent",
+                        message=f"Your child is signing up. Provide them this code to approve: {parent_otp}",
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[user.parent_email],
+                        fail_silently=False,
+                    )
+                except Exception:
+                    return Response(
+                        {"error": "Failed to send email to parent. Please check email configuration."},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    )
+
                 return Response({"message": "Profile updated. Code sent to parent."}, status=status.HTTP_200_OK)
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -169,28 +182,34 @@ class ResendOTPView(APIView):
             user.verification_code = otp
             user.save()
 
-            if not user.is_email_verified:
-                # Resend to Kid
-                send_mail(
-                    subject="Verify your Email",
-                    message=f"Your new verification code is: {otp}",
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[user.email],
-                    fail_silently=False,
+            try:
+                if not user.is_email_verified:
+                    # Resend to Kid
+                    send_mail(
+                        subject="Verify your Email",
+                        message=f"Your new verification code is: {otp}",
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[user.email],
+                        fail_silently=False,
+                    )
+                    return Response({"message": "New OTP sent to kid's email."}, status=status.HTTP_200_OK)
+                else:
+                    # Resend to Parent
+                    if not user.parent_email:
+                        return Response({"error": "Parent email not set. Complete profile first."}, status=status.HTTP_400_BAD_REQUEST)
+
+                    send_mail(
+                        subject="Action Required: Parental Consent (Resent)",
+                        message=f"Your child is signing up. Provide them this code to approve: {otp}",
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[user.parent_email],
+                        fail_silently=False,
+                    )
+                    return Response({"message": "New OTP sent to parent's email."}, status=status.HTTP_200_OK)
+            except Exception:
+                return Response(
+                    {"error": "Failed to send email. Please check email configuration."},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
-                return Response({"message": "New OTP sent to kid's email."}, status=status.HTTP_200_OK)
-            else:
-                # Resend to Parent
-                if not user.parent_email:
-                    return Response({"error": "Parent email not set. Complete profile first."}, status=status.HTTP_400_BAD_REQUEST)
-                
-                send_mail(
-                    subject="Action Required: Parental Consent (Resent)",
-                    message=f"Your child is signing up. Provide them this code to approve: {otp}",
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[user.parent_email],
-                    fail_silently=False,
-                )
-                return Response({"message": "New OTP sent to parent's email."}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
